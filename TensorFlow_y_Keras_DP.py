@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense
+from keras.models import Sequential
+from keras.layers import LSTM, Dense
 
 # --- 1. Carga y Preprocesamiento de Datos ---
 url = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv'
