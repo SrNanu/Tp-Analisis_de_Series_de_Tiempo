@@ -44,8 +44,8 @@ Sigue estos pasos para ejecutar los scripts en tu máquina local.
 
 1.  **Clona el repositorio:**
     ```bash
-    git clone <URL-de-tu-repositorio>
-    cd <nombre-del-repositorio>
+    git clone https://github.com/SrNanu/Tp-Analisis_de_Series_de_Tiempo.git
+    cd Tp-Analisis_de_Series_de_Tiempo
     ```
 
 2.  **Crea y activa un entorno virtual (recomendado):**
