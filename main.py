@@ -1,46 +1,55 @@
 # main.py
-
-# Importar nuestras funciones desde los otros archivos
+import matplotlib.pyplot as plt
 import data_loader
-import models
-import plotting
+import model_naive
+import model_prophet
+import model_lstm
+
+# Configuración global de estilo para los gráficos
+plt.style.use('seaborn-v0_8-whitegrid')
 
 def main():
-    """Función principal que orquesta todo el proceso."""
+    """Función principal que orquesta la ejecución de los modelos."""
     
-    # 1. Cargar y preparar los datos
+    # 1. Cargar datos
     url = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv'
     df, train, test = data_loader.load_and_prepare_data(url)
     
-    # 2. Visualizar los datos iniciales
-    plotting.plot_initial_data(df)
+    # Visualizar datos iniciales
+    df['y'].plot(title='Número de Pasajeros de Aerolínea Mensuales (1949-1960)', figsize=(15,7))
+    plt.show()
+    # 2. Ejecutar cada modelo secuencialmente
+    naive_preds, rmse_naive = model_naive.run(train, test)
+    prophet_preds, rmse_prophet = model_prophet.run(train, test)
+    lstm_preds, rmse_lstm = model_lstm.run(train, test)
     
-    # 3. Ejecutar cada modelo
-    naive_preds, rmse_naive = models.run_naive_model(train, test)
-    prophet_preds, rmse_prophet = models.run_prophet_model(train, test)
-    lstm_preds, rmse_lstm = models.run_lstm_model(train, test)
-    
-    # 4. Preparar DataFrame para visualizaciones
+    # 3. Visualizar la comparación final
+    print("\n--- Mostrando Comparación Final de Modelos ---")
     test_predictions = test.copy()
     test_predictions['Naive'] = naive_preds
     test_predictions['Prophet'] = prophet_preds
     test_predictions['LSTM'] = lstm_preds
     
-    # 5. Visualizar resultados individuales
-    plotting.plot_individual_prediction(train, test, test_predictions['Naive'], "Naive", "orange")
-    plotting.plot_individual_prediction(train, test, test_predictions['Prophet'], "Prophet", "green")
-    plotting.plot_individual_prediction(train, test, test_predictions['LSTM'], "LSTM", "red")
+    plt.figure(figsize=(16, 8))
+    plt.plot(train['y'], label='Datos de Entrenamiento')
+    plt.plot(test_predictions['y'], label='Datos Reales (Prueba)', color='black', lw=2)
+    plt.plot(test_predictions['Naive'], label='Predicción Naive', linestyle='--')
+    plt.plot(test_predictions['Prophet'], label='Predicción Prophet', linestyle='--')
+    plt.plot(test_predictions['LSTM'], label='Predicción LSTM', linestyle='--')
+    plt.title('Comparación de Modelos de Pronóstico', fontsize=20)
+    plt.xlabel('Fecha', fontsize=14)
+    plt.ylabel('Número de Pasajeros', fontsize=14)
+    plt.legend()
+    plt.show()
     
-    # 6. Visualizar la comparación final
-    plotting.plot_comparison(train, test_predictions)
-    
-    # 7. Imprimir el resumen de errores
-    results = {
-        "Naive": rmse_naive,
-        "Prophet": rmse_prophet,
-        "LSTM": rmse_lstm
-    }
-    plotting.print_summary_table(results)
+    # 4. Imprimir el resumen de errores
+    print("\n--- Resumen de Resultados (RMSE) ---")
+    print("=======================================")
+    print(f"| Modelo Naive  | {rmse_naive:15.2f} |")
+    print(f"| Modelo Prophet| {rmse_prophet:15.2f} |")
+    print(f"| Modelo LSTM   | {rmse_lstm:15.2f} |")
+    print("=======================================")
+    print("\n--- Demostración Finalizada ---")
 
 if __name__ == '__main__':
     main()
