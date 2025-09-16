@@ -38,8 +38,8 @@ def run(train, test, n_steps=12, repasos=300):
 
     #Entrenamiento
     model.compile(optimizer="adam", loss='mean_squared_error')
-    model.fit(X_train, y_train, epochs=repasos, verbose=1) 
-    
+    model.fit(X_train, y_train, epochs=repasos, verbose=1)
+
 
     #Predicciónes
     predicciones_escaladas = []
@@ -55,7 +55,7 @@ def run(train, test, n_steps=12, repasos=300):
         lote_actual = np.append(lote_sin_el_primero, [[prediccion_actual_escalada]], axis=1)
 
     predicciones_finales = scaler.inverse_transform(predicciones_escaladas)
-    
+
 
     rmse = np.sqrt(mean_squared_error(test['y'], predicciones_finales))
     print(f"RMSE del Modelo LSTM: {rmse:.2f}")
