@@ -1,10 +1,12 @@
-# model_lstm.py
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
+
+# Rnn ==> Recurrent Neural Network => Red Neuronal Recurrente
+# LSTM Long Short Term  => Memoria a corto y largo plazo
 
 def create_sequences(data, n_steps):
     X, y = [], []
@@ -18,10 +20,7 @@ def create_sequences(data, n_steps):
     return np.array(X), np.array(y)
 
 def run(train, test, n_steps=12, epochs=200):
-    """
-    Ejecuta el modelo LSTM, muestra su predicción
-    y devuelve las predicciones y el RMSE.
-    """
+
     print("\n--- Entrenando y Visualizando Modelo LSTM ---")
     
     # 1. Preparación de datos

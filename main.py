@@ -1,4 +1,3 @@
-# main.py
 import matplotlib.pyplot as plt
 import data_loader
 import model_naive
@@ -9,16 +8,16 @@ import model_lstm
 plt.style.use('seaborn-v0_8-whitegrid')
 
 def main():
-    """Función principal que orquesta la ejecución de los modelos."""
-    
-    # 1. Cargar datos
+
     url = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv'
-    df, train, test = data_loader.load_and_prepare_data(url)
+    df, train, test = data_loader.cargar_y_preparar_datos(url)
     
-    # Visualizar datos iniciales
+    # Datos iniciales
     df['y'].plot(title='Número de Pasajeros de Aerolínea Mensuales (1949-1960)', figsize=(15,7))
-    plt.show()
-    # 2. Ejecutar cada modelo secuencialmente
+    plt.show() #Los dataset ya tienen el plot?
+
+    # Ejecución de los modelos
+    # Cada uno calcula el modelo, muestra el gráfico y devuelve las predicciones y el RMSE
     naive_preds, rmse_naive = model_naive.run(train, test)
     prophet_preds, rmse_prophet = model_prophet.run(train, test)
     lstm_preds, rmse_lstm = model_lstm.run(train, test)
