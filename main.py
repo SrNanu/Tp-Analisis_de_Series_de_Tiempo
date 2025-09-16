@@ -13,11 +13,10 @@ def main():
     df, train, test = data_loader.cargar_y_preparar_datos(url)
     
     # Datos iniciales
-    df['y'].plot(title='Número de Pasajeros de Aerolínea Mensuales (1949-1960)', figsize=(15,7))
-    plt.show() #Los dataset ya tienen el plot?
+    df['y'].plot(title='Número de Pasajeros de Aerolínea Mensuales (1949-1960) en millones', figsize=(15,7))
+    plt.show() 
 
     # Ejecución de los modelos
-    # Cada uno calcula el modelo, muestra el gráfico y devuelve las predicciones y el RMSE
     naive_preds, rmse_naive = model_naive.run(train, test)
     prophet_preds, rmse_prophet = model_prophet.run(train, test)
     lstm_preds, rmse_lstm = model_lstm.run(train, test)
@@ -29,7 +28,7 @@ def main():
     test_predictions['Prophet'] = prophet_preds
     test_predictions['LSTM'] = lstm_preds
     
-    plt.figure(figsize=(16, 8))
+    plt.figure(figsize=(14, 6))
     plt.plot(train['y'], label='Datos de Entrenamiento')
     plt.plot(test_predictions['y'], label='Datos Reales (Prueba)', color='black', lw=2)
     plt.plot(test_predictions['Naive'], label='Predicción Naive', linestyle='--')
@@ -48,7 +47,6 @@ def main():
     print(f"| Modelo Prophet| {rmse_prophet:15.2f} |")
     print(f"| Modelo LSTM   | {rmse_lstm:15.2f} |")
     print("=======================================")
-    print("\n--- Demostración Finalizada ---")
 
 if __name__ == '__main__':
     main()

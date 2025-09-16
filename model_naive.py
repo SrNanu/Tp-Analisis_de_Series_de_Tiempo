@@ -13,7 +13,7 @@ def run(train, test):
     rmse = np.sqrt(mean_squared_error(test['y'], predictions))
     print(f"RMSE del Modelo Naive: {rmse:.2f}")
     
-    plt.figure(figsize=(15, 7))
+    plt.figure(figsize=(14, 6))
     plt.plot(train['y'], label='Datos de Entrenamiento')
     plt.plot(test['y'], label='Datos Reales (Prueba)', color='black')
     plt.plot(predictions, label='Predicción Naive', color='orange', linestyle='--')

@@ -19,25 +19,30 @@ def create_sequences(data, n_steps):
         y.append(seq_y)
     return np.array(X), np.array(y)
 
-def run(train, test, n_steps=12, epochs=200):
+def run(train, test, n_steps=12, repasos=300):
 
     print("\n--- Entrenando y Visualizando Modelo LSTM ---")
     
-    # 1. Preparación de datos
+    #Preparacion
     scaler = MinMaxScaler(feature_range=(0, 1))
     scaled_train = scaler.fit_transform(train)
     X_train, y_train = create_sequences(scaled_train, n_steps)
+
     
-    # 2. Construcción y entrenamiento del modelo
+    #Construccion
     model = Sequential([
-        LSTM(50, activation='relu', input_shape=(n_steps, 1)),
+        LSTM(100, activation='relu', input_shape=(n_steps, 1)),
         Dense(1)
     ])
+
+    # relu => Rectified Linear Unit (Activa solo si es mayor a 0)
+    #input_shape => (timesteps, features) => significa que la entrada tiene 12 pasos de tiempo y 1 salida
+    #Entrenamiento
     model.compile(optimizer='adam', loss='mean_squared_error')
     print(model.summary())
-    model.fit(X_train, y_train, epochs=epochs, verbose=0)
+    model.fit(X_train, y_train, epochs=repasos, verbose=0) # => Entrenamiento
     
-    # 3. Predicción
+    #Prediccion
     lstm_predictions_scaled = []
     last_sequence = scaled_train[-n_steps:]
     current_batch = last_sequence.reshape((1, n_steps, 1))
@@ -47,12 +52,12 @@ def run(train, test, n_steps=12, epochs=200):
         current_batch = np.append(current_batch[:, 1:, :], [[current_pred]], axis=1)
     predictions = scaler.inverse_transform(lstm_predictions_scaled)
     
-    # 4. Cálculo del Error
+
     rmse = np.sqrt(mean_squared_error(test['y'], predictions))
     print(f"RMSE del Modelo LSTM: {rmse:.2f}")
 
-    # 5. Visualización
-    plt.figure(figsize=(15, 7))
+
+    plt.figure(figsize=(14, 6))
     plt.plot(train['y'], label='Datos de Entrenamiento')
     plt.plot(test['y'], label='Datos Reales (Prueba)', color='black')
     plt.plot(test.index, predictions, label='Predicción LSTM', color='red', linestyle='--')
