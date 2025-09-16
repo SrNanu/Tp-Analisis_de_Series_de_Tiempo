@@ -35,36 +35,38 @@ def run(train, test, n_steps=12, repasos=300):
         Dense(1)
     ])
 
-    #Sequential => Modelo secuencial, una capa tras otra (el mas simple)
-    # relu => Rectified Linear Unit => Función de activacion que descarta valores negativos
-    #input_shape => (timesteps, features) => significa que la entrada tiene 12 pasos de tiempo y 1 salida
-    #Dense => Capa densa, cada neurona esta conectada a todas las neuronas de la capa anterior
 
     #Entrenamiento
     model.compile(optimizer="adam", loss='mean_squared_error')
     model.fit(X_train, y_train, epochs=repasos, verbose=1) 
     
-    #Prediccion
-    lstm_predictions_scaled = []
-    last_sequence = scaled_train[-n_steps:]
-    current_batch = last_sequence.reshape((1, n_steps, 1))
-    for _ in range(len(test)):
-        current_pred = model.predict(current_batch, verbose=0)[0]
-        lstm_predictions_scaled.append(current_pred)
-        current_batch = np.append(current_batch[:, 1:, :], [[current_pred]], axis=1)
-    predictions = scaler.inverse_transform(lstm_predictions_scaled)
+
+    #Predicciónes
+    predicciones_escaladas = []
+    ultima_secuencia_real = scaled_train[-n_steps:]
+    lote_actual = ultima_secuencia_real.reshape((1, n_steps, 1))
+
+    for i in range(len(test)):
+        prediccion_actual_escalada = model.predict(lote_actual, verbose=0)[0]
+        predicciones_escaladas.append(prediccion_actual_escalada)
+        
+        lote_sin_el_primero = lote_actual[:, 1:, :]
+        
+        lote_actual = np.append(lote_sin_el_primero, [[prediccion_actual_escalada]], axis=1)
+
+    predicciones_finales = scaler.inverse_transform(predicciones_escaladas)
     
 
-    rmse = np.sqrt(mean_squared_error(test['y'], predictions))
+    rmse = np.sqrt(mean_squared_error(test['y'], predicciones_finales))
     print(f"RMSE del Modelo LSTM: {rmse:.2f}")
 
 
     plt.figure(figsize=(14, 6))
     plt.plot(train['y'], label='Datos de Entrenamiento')
     plt.plot(test['y'], label='Datos Reales (Prueba)', color='black')
-    plt.plot(test.index, predictions, label='Predicción LSTM', color='red', linestyle='--')
+    plt.plot(test.index, predicciones_finales, label='Predicción LSTM', color='red', linestyle='--')
     plt.title('Resultado del Modelo LSTM', fontsize=20)
     plt.legend()
     plt.show()
 
-    return predictions.flatten(), rmse
+    return predicciones_finales.flatten(), rmse
