@@ -41,8 +41,8 @@ def run(train, test, n_steps=12, repasos=300):
     #Dense => Capa densa, cada neurona esta conectada a todas las neuronas de la capa anterior
 
     #Entrenamiento
-    model.compile(optimizer='adam', loss='mean_squared_error')
-    model.fit(X_train, y_train, epochs=repasos, verbose=0) 
+    model.compile(optimizer="adam", loss='mean_squared_error')
+    model.fit(X_train, y_train, epochs=repasos, verbose=1) 
     
     #Prediccion
     lstm_predictions_scaled = []
