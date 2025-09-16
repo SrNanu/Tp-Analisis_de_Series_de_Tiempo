@@ -41,7 +41,7 @@ def run(train, test, n_steps=12, repasos=300):
     model.fit(X_train, y_train, epochs=repasos, verbose=1)
 
 
-    #Predicciónes
+    #Predicciones
     predicciones_escaladas = []
     ultima_secuencia_real = scaled_train[-n_steps:]
     lote_actual = ultima_secuencia_real.reshape((1, n_steps, 1))
