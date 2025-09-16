@@ -23,7 +23,7 @@ def run(train, test, n_steps=12, repasos=300):
 
     print("\n--- Entrenando y Visualizando Modelo LSTM ---")
     
-    #Preparacion
+    #Preparo los datos
     scaler = MinMaxScaler(feature_range=(0, 1))
     scaled_train = scaler.fit_transform(train)
     X_train, y_train = create_sequences(scaled_train, n_steps)
@@ -35,12 +35,14 @@ def run(train, test, n_steps=12, repasos=300):
         Dense(1)
     ])
 
-    # relu => Rectified Linear Unit (Activa solo si es mayor a 0)
+    #Sequential => Modelo secuencial, una capa tras otra (el mas simple)
+    # relu => Rectified Linear Unit => Función de activacion que descarta valores negativos
     #input_shape => (timesteps, features) => significa que la entrada tiene 12 pasos de tiempo y 1 salida
+    #Dense => Capa densa, cada neurona esta conectada a todas las neuronas de la capa anterior
+
     #Entrenamiento
     model.compile(optimizer='adam', loss='mean_squared_error')
-    print(model.summary())
-    model.fit(X_train, y_train, epochs=repasos, verbose=0) # => Entrenamiento
+    model.fit(X_train, y_train, epochs=repasos, verbose=0) 
     
     #Prediccion
     lstm_predictions_scaled = []

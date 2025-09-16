@@ -16,12 +16,12 @@ def main():
     df['y'].plot(title='Número de Pasajeros de Aerolínea Mensuales (1949-1960) en millones', figsize=(15,7))
     plt.show() 
 
-    # Ejecución de los modelos
+    # Modelos
     naive_preds, rmse_naive = model_naive.run(train, test)
     prophet_preds, rmse_prophet = model_prophet.run(train, test)
     lstm_preds, rmse_lstm = model_lstm.run(train, test)
     
-    # 3. Visualizar la comparación final
+    # Comparación final
     print("\n--- Mostrando Comparación Final de Modelos ---")
     test_predictions = test.copy()
     test_predictions['Naive'] = naive_preds
@@ -39,8 +39,8 @@ def main():
     plt.ylabel('Número de Pasajeros', fontsize=14)
     plt.legend()
     plt.show()
-    
-    # 4. Imprimir el resumen de errores
+
+    # Errores
     print("\n--- Resumen de Resultados (RMSE) ---")
     print("=======================================")
     print(f"| Modelo Naive  | {rmse_naive:15.2f} |")

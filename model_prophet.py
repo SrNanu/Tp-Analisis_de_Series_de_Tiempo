@@ -10,8 +10,8 @@ def run(train, test):
 
     prophet_train = train.reset_index().rename(columns={'Month': 'ds'})
     model = Prophet(yearly_seasonality=True, weekly_seasonality=False, daily_seasonality=False)
-    # Prophet utiliza 3 compoentes: Tendencia, Estacionalidad y Holidays
-    # yearly_seasonality => Estacionalidad anual
+    # Tendencia, Estacionalidad y Holidays
+
 
     model.fit(prophet_train)
 
@@ -32,6 +32,6 @@ def run(train, test):
     plt.plot(predictions, label='Predicción Prophet', color='green', linestyle='--')
     plt.title('Resultado del Modelo Prophet', fontsize=20)
     plt.legend()
-    plt.show() # Muestra la predicción y espera
+    plt.show() 
 
     return predictions, rmse
